@@ -1,6 +1,6 @@
 #include <iostream>
-#include "eigen-3.4.0/Eigen/Dense"
-#include "eigen-3.4.0/EigenRand/EigenRand"
+#include "Eigen/Dense"
+#include "EigenRand/EigenRand"
 
 
 class Linear {

@@ -3,4 +3,7 @@ project(coursework)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(coursework main.cpp test.cpp)
+add_subdirectory(eigen)
+add_subdirectory(EigenRand)
+
+add_subdirectory(NeuralNetwork)
