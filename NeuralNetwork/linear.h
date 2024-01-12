@@ -1,6 +1,6 @@
 #include <iostream>
-#include "Eigen/Dense"
-#include "EigenRand/EigenRand"
+#include <Eigen/Dense>
+#include "../EigenRand/EigenRand/EigenRand"
 
 
 class Linear {
@@ -9,12 +9,18 @@ class Linear {
     using Tensor2D = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>;
     ////
 public:
+    Linear() = delete;
     Linear(size_t in_features, size_t out_features, bool bias = true);
 
     Tensor2D operator()(Tensor2D x);
 
 private:
-    Tensor2D grad_;
+    Tensor2D input_seq_;
+    Tensor2D output_seq_;
+    Tensor2D weight_grad_;
+    Tensor1D bias_grad_;
     Tensor2D weight_;
     Tensor1D bias_;
+    inline static Eigen::Rand::Vmt19937_64 urng{42};
 };
+
