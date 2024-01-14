@@ -1,45 +1,49 @@
 #include "linear.h"
 
 namespace nn {
-Linear::Linear(size_t in_features, size_t out_features, bool bias)
-    : weight_(in_features, out_features), bias_(out_features) {
+Linear::Linear(Index in_features, Index out_features, bool enable_bias)
+    : weight_(InitializeWeights(in_features, out_features)),
+      bias_(InitializeBias(enable_bias, in_features, out_features)) {
     //// TODO: insert asserts
-
-    double k = 1 / in_features;
-    double sqrt_k = std::sqrt(k);
-    Eigen::Rand::UniformRealGen gen(-sqrt_k, sqrt_k);
-    bias_.setZero();
-    if (bias) {
-        bias_ = gen.generate<Tensor1D>(1, out_features, urng);
-    }
-    weight_ = gen.generate<Tensor2D>(in_features, out_features, urng);
-
     //// TODO: initialize other class fields
 }
 
-Linear::Tensor2D Linear::operator()(Linear::Tensor2D x) {
-    return weight_ * x + bias_;
+Linear::Tensor2D Linear::operator()(const Linear::Tensor2D& x) const {
+    return x * weight_ + bias_;
 }
 
-void Linear::Update(Linear::Tensor2D u) {
+Linear::Tensor2D Linear::Update(Linear::Tensor2D& u, double lambda) {
     /*
      * We expect that vector u is coming from non-linear layer.
      * Thus vector u coming for update is actually vector u` = d sigma * u,
      * where u is the gradient vector that was fed to non-linear layer
      */
     //// TODO: insert asserts
+    Tensor2D rethrow_gradient_vector = u.transpose() * weight_;
 
-    for (size_t i = 0; i < u.cols(); ++i) {
-        weight_grad_ += u.col(i) * input_seq_.row(i);
-        bias_grad_ += u.col(i);
-    }
-    weight_ -= weight_grad_;
-    bias_ -= bias_grad_;
+    weight_grad_ = u * input_seq_;
+    bias_grad_ = u.rowwise().sum();
+    weight_ -= lambda * weight_grad_;
+    bias_ -= lambda * bias_grad_;
     weight_grad_.setZero();
     bias_grad_.setZero();
+
+    return rethrow_gradient_vector;
 }
-Linear::Tensor2D Linear::RethrowGradient(Linear::Tensor2D u) {
-    //// Needs to be done before weight updating or not?
-    return u.transpose() * weight_;
+
+Linear::Tensor2D Linear::InitializeWeights(Linear::Index in_features, Linear::Index out_features) {
+    double k = 1 / in_features;
+    double sqrt_k = std::sqrt(k);
+    return rng_.GetUniformMatrix(-sqrt_k, sqrt_k, in_features, out_features);
+}
+
+Linear::Tensor1D Linear::InitializeBias(bool enable_bias, Linear::Index in_features,
+                                        Linear::Index out_features) {
+    if (enable_bias) {
+        double k = 1 / in_features;
+        double sqrt_k = std::sqrt(k);
+        return rng_.GetUniformVector(-sqrt_k, sqrt_k, out_features);
+    }
+    return Tensor1D(out_features).setZero();
 }
 }  // namespace nn
