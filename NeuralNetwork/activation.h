@@ -19,7 +19,16 @@ private:
     std::function<double(double)> dsigma_;
 };
 
-class Sigmoid : ActivationFunction {};
+class Sigmoid : ActivationFunction {
+public:
+    Sigmoid();
+    Tensor2D operator()(const Tensor2D& x) const;
+    Tensor2D Update(const Tensor2D& u);
+
+private:
+    std::function<double(double)> sigma_;
+    std::function<double(double)> dsigma_;
+};
 
 class Tanh : ActivationFunction {};
 }  // namespace nn
