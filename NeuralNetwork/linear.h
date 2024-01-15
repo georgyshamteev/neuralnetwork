@@ -1,13 +1,7 @@
-#include <Eigen/Dense>
-#include "EigenRand/EigenRand"
-#include "random.h"
+#include "neuralbase.h"
 
 namespace nn {
-class Linear {
-    using Index = Eigen::Index;
-    using Tensor1D = Eigen::Matrix<double, 1, Eigen::Dynamic>;
-    using Tensor2D = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>;
-    using Tensor3D = std::vector<Tensor2D>;
+class Linear : protected NeuralBase {
 
 public:
     Linear(Index in_features, Index out_features, bool enable_bias = true);
