@@ -1,34 +1,22 @@
-#include "neuralbase.h"
+#include "neuraldefines.h"
 
 namespace nn {
-class ActivationFunction : protected NeuralBase {
+
+class ActivationFunction : protected NeuralDefines {
 
 public:
-    virtual Tensor2D operator()(const Tensor2D& x) const = 0;
-    virtual Tensor2D Update(const Tensor2D& u) = 0;
-};
+    static ActivationFunction ReLU();
+    static ActivationFunction Sigmoid();
+    static ActivationFunction Tanh();
 
-class ReLu : ActivationFunction {
-public:
-    ReLu();
     Tensor2D operator()(const Tensor2D& x) const;
     Tensor2D Update(const Tensor2D& u);
 
 private:
+    ActivationFunction(std::function<double(double)>, std::function<double(double)>);
+    Tensor2D input_seq_;
     std::function<double(double)> sigma_;
     std::function<double(double)> dsigma_;
 };
 
-class Sigmoid : ActivationFunction {
-public:
-    Sigmoid();
-    Tensor2D operator()(const Tensor2D& x) const;
-    Tensor2D Update(const Tensor2D& u);
-
-private:
-    std::function<double(double)> sigma_;
-    std::function<double(double)> dsigma_;
-};
-
-class Tanh : ActivationFunction {};
 }  // namespace nn

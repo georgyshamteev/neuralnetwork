@@ -2,6 +2,7 @@
 #include "EigenRand/EigenRand"
 
 namespace nn_random {
+
 class Random {
     using Index = Eigen::Index;
     using Tensor1D = Eigen::Matrix<double, 1, Eigen::Dynamic>;
@@ -15,4 +16,5 @@ public:
 private:
     inline static Eigen::Rand::Vmt19937_64 urng{42};
 };
+
 }  // namespace nn_random

@@ -1,6 +1,7 @@
 #include "linear.h"
 
 namespace nn {
+
 Linear::Linear(Index in_features, Index out_features, bool enable_bias)
     : weight_(InitializeWeights(in_features, out_features)),
       bias_(InitializeBias(enable_bias, in_features, out_features)) {
@@ -46,4 +47,5 @@ Linear::Tensor1D Linear::InitializeBias(bool enable_bias, Linear::Index in_featu
     }
     return Tensor1D(out_features).setZero();
 }
+
 }  // namespace nn

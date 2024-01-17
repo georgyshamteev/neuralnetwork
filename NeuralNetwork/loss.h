@@ -1,14 +1,15 @@
-#include "neuralbase.h"
+#include "neuraldefines.h"
 
 namespace nn {
-class Loss : protected NeuralBase {
+
+class Loss : protected NeuralDefines {
 
 public:
-    virtual double operator()(const Tensor2D& x, const Tensor2D& y) = 0;
-    virtual Tensor2D CalculateGradient() = 0;
+    Loss();
+    double operator()(const Tensor2D& x, const Tensor2D& y);
+    Tensor2D CalculateGradient();
+
+private:
 };
 
-class MSELoss : Loss {};
-
-class BCELoss : Loss {};
 }  // namespace nn

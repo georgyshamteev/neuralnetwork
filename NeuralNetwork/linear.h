@@ -1,7 +1,8 @@
-#include "neuralbase.h"
+#include "neuraldefines.h"
 
 namespace nn {
-class Linear : protected NeuralBase {
+
+class Linear : protected NeuralDefines {
 
 public:
     Linear(Index in_features, Index out_features, bool enable_bias = true);
@@ -18,4 +19,5 @@ private:
     Tensor1D bias_;
     nn_random::Random rng_;
 };
+
 }  // namespace nn
