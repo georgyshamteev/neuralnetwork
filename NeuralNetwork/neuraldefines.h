@@ -1,7 +1,8 @@
 #include <Eigen/Dense>
 #include "EigenRand/EigenRand"
-#include "cmath"
+#include <cmath>
 #include "random.h"
+#include <cassert>
 
 namespace nn {
 

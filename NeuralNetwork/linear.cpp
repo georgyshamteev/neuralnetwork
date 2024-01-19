@@ -5,8 +5,10 @@ namespace nn {
 Linear::Linear(int64_t in_features, int64_t out_features, bool enable_bias)
     : weight_(InitializeWeights(in_features, out_features)),
       bias_(InitializeBias(enable_bias, in_features, out_features)) {
-    //// TODO: insert asserts
-    //// TODO: initialize other class fields
+    assert(weight_.rows() == in_features);
+    assert(weight_.cols() == out_features);
+    assert(bias_.rows() == 1);
+    assert(bias_.cols() == out_features);
 }
 
 Linear::Tensor2D Linear::operator()(const Linear::Tensor2D& x) {
@@ -21,9 +23,9 @@ Linear::Tensor2D Linear::Update(Linear::Tensor2D& u, double lambda) {
      * where u is the gradient vector that was fed to non-linear layer.
      * The size of u` is expected to be (m, k), while weight size is (n, m).
      */
-    //// TODO: insert asserts
-    Tensor2D rethrow_gradient_vector = (weight_ * u).transpose() ;
+    assert(u.rows() == weight_.cols());
 
+    Tensor2D rethrow_gradient_vector = (weight_ * u).transpose();
     weight_grad_ = (u * input_seq_).transpose();
     bias_grad_ = u.rowwise().sum();
     weight_ -= lambda * weight_grad_;
@@ -35,6 +37,8 @@ Linear::Tensor2D Linear::Update(Linear::Tensor2D& u, double lambda) {
 }
 
 Linear::Tensor2D Linear::InitializeWeights(int64_t in_features, int64_t out_features) {
+    assert(in_features != 0);
+    assert(out_features != 0);
     double k = 1 / in_features;
     double sqrt_k = std::sqrt(k);
     return rng_.GetUniformMatrix(-sqrt_k, sqrt_k, in_features, out_features);
@@ -42,6 +46,8 @@ Linear::Tensor2D Linear::InitializeWeights(int64_t in_features, int64_t out_feat
 
 Linear::Tensor1D Linear::InitializeBias(bool enable_bias, int64_t in_features,
                                         int64_t out_features) {
+    assert(in_features != 0);
+    assert(out_features != 0);
     if (enable_bias) {
         double k = 1 / in_features;
         double sqrt_k = std::sqrt(k);
