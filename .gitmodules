@@ -4,3 +4,6 @@
 [submodule "EigenRand"]
 	path = EigenRand
 	url = https://github.com/bab2min/EigenRand.git
+[submodule "catch"]
+	path = catch
+	url = https://github.com/georgyshamteev/catch.git

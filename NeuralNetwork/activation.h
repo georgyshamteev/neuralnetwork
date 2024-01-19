@@ -7,7 +7,7 @@ class ActivationFunction : protected NeuralDefines {
 public:
     static ActivationFunction ReLU();
     static ActivationFunction Sigmoid();
-    static ActivationFunction Tanh();
+//    static ActivationFunction Tanh();
 
     Tensor2D operator()(const Tensor2D& x) const;
     Tensor2D Update(const Tensor2D& u);

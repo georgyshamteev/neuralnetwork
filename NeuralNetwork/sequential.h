@@ -8,6 +8,7 @@ class Sequential {
 public:
     Sequential(Args... args);
 
+
 private:
     std::tuple<Args...> network_;
 };
