@@ -13,18 +13,21 @@ ActivationFunction ActivationFunction::Sigmoid() {
         [](double x) { return (1 / (1 + std::exp(-x))) * (1 - 1 / (1 + std::exp(-x))); });
 }
 
-//ActivationFunction ActivationFunction::Tanh() {
-//        return ActivationFunction();
-//}
+// ActivationFunction ActivationFunction::Tanh() {
+//         return ActivationFunction();
+// }
 
-NeuralDefines::Tensor2D ActivationFunction::operator()(const NeuralDefines::Tensor2D& x) const {
+NeuralDefines::Tensor2D ActivationFunction::operator()(const NeuralDefines::Tensor2D& x) {
+    input_ = x;
     return x.unaryExpr(sigma_);
 }
 
 NeuralDefines::Tensor2D ActivationFunction::Update(const NeuralDefines::Tensor2D& u) {
     Tensor2D ret(u.cols(), u.rows());
+    Eigen::Matrix<double, 100, 100> x;
     for (Index i = 0; i < u.rows(); ++i) {
-        ret.col(i) = Eigen::Diagonal(u.row(i)).unaryExpr(dsigma_) * u.row(i).transpose();
+        ret.col(i) =
+            Eigen::Diagonal(input_.row(i).eval().unaryExpr(dsigma_)) * u.row(i).transpose();
     }
     return ret;
 }

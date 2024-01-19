@@ -6,7 +6,7 @@ template <typename... Args>
 class Sequential {
 
 public:
-    Sequential(Args... args);
+    Sequential(Args&&... args);
 
 
 private:
