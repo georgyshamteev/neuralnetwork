@@ -28,6 +28,3 @@ add_catch(test_activation tests/test_activation.cpp
         sequential.cpp)
 
 target_link_libraries(test_activation Eigen3::Eigen)
-
-
-
