@@ -3,8 +3,12 @@
 namespace nn {
 
 Linear::Linear(Index in_features, Index out_features, Bias enable_bias)
-    : weight_(InitializeWeights(in_features, out_features)),
-      bias_(InitializeBias(enable_bias, in_features, out_features)) {
+    : model_state_(ModelState::train),
+      bias_state_(enable_bias),
+      weight_(InitializeWeights(in_features, out_features)),
+      bias_(InitializeBias(enable_bias, in_features, out_features)),
+      data_ptr_(std::make_unique<LinearData>()) {
+    assert(data_ptr_ != nullptr);
     assert(weight_.rows() == in_features);
     assert(weight_.cols() == out_features);
     assert(bias_.rows() == 1);
@@ -12,7 +16,9 @@ Linear::Linear(Index in_features, Index out_features, Bias enable_bias)
 }
 
 Linear::Tensor2D Linear::operator()(const Linear::Tensor2D& x) {
-    input_seq_ = x;
+    if (model_state_ == ModelState::train) {
+        data_ptr_->input_seq_ = x;
+    }
     return x * weight_ + (Tensor1D(x.rows()).setOnes().transpose()) * bias_;
 }
 
@@ -26,12 +32,8 @@ Linear::Tensor2D Linear::Update(Linear::Tensor2D& u, double lambda) {
     assert(u.rows() == weight_.cols());
 
     Tensor2D rethrow_gradient_vector = (weight_ * u).transpose();
-    weight_grad_ = (u * input_seq_).transpose();
-    bias_grad_ = u.rowwise().sum();
-    weight_ -= lambda * weight_grad_;
-    bias_ -= lambda * bias_grad_;
-    weight_grad_.setZero();
-    bias_grad_.setZero();
+    data_ptr_->weight_grad_ = (u * data_ptr_->input_seq_).transpose();
+    data_ptr_->bias_grad_ = u.rowwise().sum();
 
     return rethrow_gradient_vector;
 }
@@ -50,6 +52,20 @@ Linear::Tensor1D Linear::InitializeBias(Bias enable_bias, int64_t in_features,
         return nn_random::Random::GetGaussVector(out_features);
     }
     return Tensor1D(out_features).setZero();
+}
+
+void Linear::Train() {
+    model_state_ = ModelState::train;
+    if (data_ptr_ == nullptr) {
+        data_ptr_ = std::make_unique<LinearData>();
+    }
+}
+
+void Linear::Eval() {
+    model_state_ = ModelState::eval;
+    if (data_ptr_ != nullptr) {
+        data_ptr_.reset(nullptr);
+    }
 }
 
 }  // namespace nn
