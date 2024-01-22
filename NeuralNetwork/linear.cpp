@@ -2,7 +2,7 @@
 
 namespace nn {
 
-Linear::Linear(int64_t in_features, int64_t out_features, bool enable_bias)
+Linear::Linear(Index in_features, Index out_features, Bias enable_bias)
     : weight_(InitializeWeights(in_features, out_features)),
       bias_(InitializeBias(enable_bias, in_features, out_features)) {
     assert(weight_.rows() == in_features);
@@ -39,19 +39,15 @@ Linear::Tensor2D Linear::Update(Linear::Tensor2D& u, double lambda) {
 Linear::Tensor2D Linear::InitializeWeights(int64_t in_features, int64_t out_features) {
     assert(in_features != 0);
     assert(out_features != 0);
-    double k = 1 / in_features;
-    double sqrt_k = std::sqrt(k);
-    return rng_.GetUniformMatrix(-sqrt_k, sqrt_k, in_features, out_features);
+    return nn_random::Random::GetGaussMatrix(in_features, out_features);
 }
 
-Linear::Tensor1D Linear::InitializeBias(bool enable_bias, int64_t in_features,
+Linear::Tensor1D Linear::InitializeBias(Bias enable_bias, int64_t in_features,
                                         int64_t out_features) {
     assert(in_features != 0);
     assert(out_features != 0);
-    if (enable_bias) {
-        double k = 1 / in_features;
-        double sqrt_k = std::sqrt(k);
-        return rng_.GetUniformVector(-sqrt_k, sqrt_k, out_features);
+    if (enable_bias == Bias::enable) {
+        return nn_random::Random::GetGaussVector(out_features);
     }
     return Tensor1D(out_features).setZero();
 }

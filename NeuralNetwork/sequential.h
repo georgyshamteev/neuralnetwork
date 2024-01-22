@@ -8,9 +8,8 @@ class Sequential {
 public:
     Sequential(Args&&... args);
 
-
 private:
-    std::tuple<Args...> network_;
+    std::tuple<Args...> layers_;
 };
 
 }  // namespace nn

@@ -5,9 +5,8 @@ namespace nn {
 class Loss : protected NeuralDefines {
 
 public:
-    Loss();
-    double operator()(const Tensor2D& x, const Tensor2D& y);
-    Tensor2D CalculateGradient();
+    double operator()(const Tensor2D& x, const Tensor2D& y) const;
+    Tensor2D Gradient() const;
 
 private:
 };

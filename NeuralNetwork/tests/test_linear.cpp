@@ -1,41 +1,36 @@
 #include <catch.hpp>
-#include "../linear.h"
-
-using Index = Eigen::Index;
-using Tensor1D = Eigen::Matrix<double, 1, Eigen::Dynamic>;
-using Tensor2D = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>;
-using Tensor3D = std::vector<Tensor2D>;
+#include "linear.h"
 
 TEST_CASE("Linear is successfully created") {
-    REQUIRE_NOTHROW(nn::Linear(10, 10, true));
-    REQUIRE_NOTHROW(nn::Linear(20, 10, false));
+    REQUIRE_NOTHROW(nn::Linear(10, 10, nn::Bias::enable));
+    REQUIRE_NOTHROW(nn::Linear(20, 10, nn::Bias::disable));
     REQUIRE_NOTHROW(nn::Linear(32, 16));
 }
 
 TEST_CASE("Linear operator() is working with single input") {
-    nn::Linear layer(20, 10, true);
-    Tensor2D input(1, 20);
+    nn::Linear layer(20, 10, nn::Bias::enable);
+    nn::Tensor2D input(1, 20);
     auto output = layer(input);
     REQUIRE(output.rows() == 1);
     REQUIRE(output.cols() == 10);
 }
 
 TEST_CASE("Linear operator() is working with multiple input") {
-    nn::Linear layer(20, 10, true);
-    Tensor2D input(100, 20);
+    nn::Linear layer(20, 10, nn::Bias::enable);
+    nn::Tensor2D input(100, 20);
     auto output = layer(input);
     REQUIRE(output.rows() == 100);
     REQUIRE(output.cols() == 10);
 }
 
 TEST_CASE("Linear layer update is working with single input") {
-    nn::Linear layer(20, 10, true);
-    Tensor2D input(1, 20);
+    nn::Linear layer(20, 10, nn::Bias::enable);
+    nn::Tensor2D input(1, 20);
     auto output = layer(input);
     REQUIRE(output.rows() == 1);
     REQUIRE(output.cols() == 10);
 
-    Tensor2D u(10, 1);
+    nn::Tensor2D u(10, 1);
     u.setRandom();
     double lambda = 2e-5;
     auto grad = layer.Update(u, lambda);
@@ -44,13 +39,13 @@ TEST_CASE("Linear layer update is working with single input") {
 }
 
 TEST_CASE("Linear layer update is working with multiple input") {
-    nn::Linear layer(20, 10, true);
-    Tensor2D input(100, 20);
+    nn::Linear layer(20, 10, nn::Bias::enable);
+    nn::Tensor2D input(100, 20);
     auto output = layer(input);
     REQUIRE(output.rows() == 100);
     REQUIRE(output.cols() == 10);
 
-    Tensor2D u(10, 100);
+    nn::Tensor2D u(10, 100);
     u.setRandom();
     double lambda = 2e-5;
     auto grad = layer.Update(u, lambda);

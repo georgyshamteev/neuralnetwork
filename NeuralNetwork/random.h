@@ -10,11 +10,15 @@ class Random {
     using Tensor3D = std::vector<Tensor2D>;
 
 public:
-    Tensor1D GetUniformVector(double low, double high, Index cols) const;
-    Tensor2D GetUniformMatrix(double low, double high, Index rows, Index cols) const;
+    static Tensor1D GetGaussVector(Index cols);
+    static Tensor2D GetGaussMatrix(Index rows, Index cols);
 
 private:
-    inline static Eigen::Rand::Vmt19937_64 urng{42};
+    using Generator64 = Eigen::Rand::Vmt19937_64;
+    static inline Generator64& Gen() {
+        static Generator64 rng = 42;
+        return rng;
+    }
 };
 
 }  // namespace nn_random
