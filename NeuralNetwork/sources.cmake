@@ -3,4 +3,4 @@ add_library(neural_network
     linear.cpp
     loss.cpp
     random.cpp
-    sequential.cpp)
+)

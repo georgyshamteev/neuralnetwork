@@ -1,3 +1,5 @@
+#pragma once
+
 #include "neuraldefines.h"
 
 namespace nn {

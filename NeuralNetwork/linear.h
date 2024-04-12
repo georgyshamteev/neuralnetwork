@@ -1,3 +1,4 @@
+#pragma once
 #include "neuraldefines.h"
 #include "memory"
 
@@ -13,7 +14,7 @@ class Linear : protected NeuralDefines {
 public:
     Linear(Index in_features, Index out_features, Bias enable_bias = Bias::enable);
     Tensor2D operator()(const Tensor2D& x);
-    Tensor2D Update(Tensor2D& u, double lambda);
+    Tensor2D Update(Tensor2D& u);
     void Train();
     void Eval();
 

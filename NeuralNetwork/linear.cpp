@@ -22,7 +22,7 @@ Linear::Tensor2D Linear::operator()(const Linear::Tensor2D& x) {
     return x * weight_ + (Tensor1D(x.rows()).setOnes().transpose()) * bias_;
 }
 
-Linear::Tensor2D Linear::Update(Linear::Tensor2D& u, double lambda) {
+Linear::Tensor2D Linear::Update(Linear::Tensor2D& u) {
     /*
      * We expect that vector u is coming from non-linear layer.
      * Thus vector u coming for update is actually vector u` = d sigma * u,
