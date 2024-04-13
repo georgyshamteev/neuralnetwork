@@ -14,3 +14,16 @@ void nn::Sequential::Backward(const nn::Tensor2D& x) {
         grad = layers_[i - 1]->Update(grad);
     }
 }
+
+std::vector<nn::ParameterPack> nn::Sequential::TrainingParams() {
+    std::vector<nn::ParameterPack> res;
+    for (auto& l : layers_) {
+        auto params = l->TrainingParams();
+        if (!params.empty()) {
+            for (auto parameter : params) {
+                res.push_back(parameter);
+            }
+        }
+    }
+    return res;
+}

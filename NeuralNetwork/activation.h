@@ -14,6 +14,8 @@ public:
 
     Tensor2D operator()(const Tensor2D& x);
     Tensor2D Update(const Tensor2D& u);
+    std::vector<ParameterPack> TrainingParams();
+
 
 private:
     ActivationFunction(std::function<Tensor2D(const Tensor2D&)>,

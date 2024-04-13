@@ -11,13 +11,9 @@ TEST_CASE("test") {
                                    nn::Linear(40, 10), nn::ActivationFunction::Tanh()});
 }
 
-TEST_CASE("Sequentail operator()") {
+TEST_CASE("Sequential operator()") {
     nn::Tensor1D x = nn_random::Random::GetGaussVector(784);
-    nn::Sequential model(nn::Linear(784, 196),
-                         nn::ActivationFunction::ReLU(),
-                         nn::Linear(196, 49),
-                         nn::ActivationFunction::ReLU(),
-                         nn::Linear(49, 10)
-                         );
+    nn::Sequential model(nn::Linear(784, 196), nn::ActivationFunction::ReLU(), nn::Linear(196, 49),
+                         nn::ActivationFunction::ReLU(), nn::Linear(49, 10));
     auto y = model(x);
 }

@@ -44,28 +44,39 @@ Linear::Tensor2D Linear::InitializeWeights(int64_t in_features, int64_t out_feat
     return nn_random::Random::GetGaussMatrix(in_features, out_features);
 }
 
-Linear::Tensor1D Linear::InitializeBias(Bias enable_bias, int64_t in_features,
+Linear::Tensor2D Linear::InitializeBias(Bias enable_bias, int64_t in_features,
                                         int64_t out_features) {
     assert(in_features != 0);
     assert(out_features != 0);
     if (enable_bias == Bias::enable) {
         return nn_random::Random::GetGaussVector(out_features);
     }
-    return Tensor1D(out_features).setZero();
+    return Tensor2D(1, out_features).setZero();
 }
 
 void Linear::Train() {
     model_state_ = ModelState::train;
-    if (data_ptr_ == nullptr) {
-        data_ptr_ = std::make_unique<LinearData>();
-    }
+    //    if (data_ptr_ == nullptr) {
+    //        data_ptr_ = std::make_unique<LinearData>();
+    //    }
 }
 
 void Linear::Eval() {
     model_state_ = ModelState::eval;
-    if (data_ptr_ != nullptr) {
-        data_ptr_.reset(nullptr);
+    //    if (data_ptr_ != nullptr) {
+    //        data_ptr_.reset(nullptr);
+    //    }
+}
+
+std::vector<ParameterPack> Linear::TrainingParams() {
+    if (model_state_ == ModelState::eval) {
+        throw std::runtime_error("Can not get training params in eval mode.");
     }
+    if (bias_state_ == Bias::enable) {
+        return std::vector<ParameterPack>{ ParameterPack{weight_, data_ptr_->weight_grad_},
+                                          {bias_, data_ptr_->bias_grad_}};
+    }
+    return std::vector<ParameterPack>{{weight_, data_ptr_->weight_grad_}};
 }
 
 }  // namespace nn

@@ -8,6 +8,7 @@ add_catch(test_linear tests/test_linear.cpp
         loss.cpp
         random.cpp
         sequential.cpp
+        optimizer.cpp
         )
 
 target_link_libraries(test_linear Eigen3::Eigen)
@@ -18,6 +19,7 @@ add_catch(test_random tests/test_random.cpp
         loss.cpp
         random.cpp
         sequential.cpp
+        optimizer.cpp
         )
 
 target_link_libraries(test_random Eigen3::Eigen)
@@ -28,6 +30,7 @@ add_catch(test_activation tests/test_activation.cpp
         loss.cpp
         random.cpp
         sequential.cpp
+        optimizer.cpp
         )
 
 target_link_libraries(test_activation Eigen3::Eigen)
@@ -38,6 +41,7 @@ add_catch(test_loss tests/test_loss.cpp
         loss.cpp
         random.cpp
         sequential.cpp
+        optimizer.cpp
         )
 
 target_link_libraries(test_loss Eigen3::Eigen)
@@ -48,6 +52,18 @@ add_catch(test_sequential tests/test_sequential.cpp
         loss.cpp
         random.cpp
         sequential.cpp
+        optimizer.cpp
         )
 
 target_link_libraries(test_sequential Eigen3::Eigen)
+
+add_catch(test_optimizer tests/test_optimizer.cpp
+        activation.cpp
+        linear.cpp
+        loss.cpp
+        random.cpp
+        sequential.cpp
+        optimizer.cpp
+)
+
+target_link_libraries(test_optimizer Eigen3::Eigen)

@@ -33,7 +33,7 @@ TEST_CASE("Linear layer update is working with single input") {
     nn::Tensor2D u(10, 1);
     u.setRandom();
     double lambda = 2e-5;
-    auto grad = layer.Update(u, lambda);
+    auto grad = layer.Update(u);
     REQUIRE(grad.rows() == 1);
     REQUIRE(grad.cols() == 20);
 }
@@ -48,7 +48,7 @@ TEST_CASE("Linear layer update is working with multiple input") {
     nn::Tensor2D u(10, 100);
     u.setRandom();
     double lambda = 2e-5;
-    auto grad = layer.Update(u, lambda);
+    auto grad = layer.Update(u);
     REQUIRE(grad.rows() == 100);
     REQUIRE(grad.cols() == 20);
 }

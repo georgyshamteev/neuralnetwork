@@ -74,4 +74,8 @@ ActivationFunction::ActivationFunction(std::function<Tensor2D(const Tensor2D&)> 
     : sigma_(sigma), dsigma_(dsigma) {
 }
 
+std::vector<ParameterPack> ActivationFunction::TrainingParams() {
+    return std::vector<ParameterPack>();
+}
+
 }  // namespace nn

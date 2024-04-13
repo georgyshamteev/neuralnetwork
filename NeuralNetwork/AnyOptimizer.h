@@ -4,20 +4,20 @@
 #include <memory>
 #include "neuraldefines.h"
 
-class AnyObject {
+class AnyOptimizer {
 public:
     using Tensor2D = nn::Tensor2D;
 
     class InnerBase;
-    AnyObject() = default;
+    AnyOptimizer() = default;
 
     template <typename T>
-    AnyObject(T &&object)
+    AnyOptimizer(T &&object)
         : inner_(std::make_unique<Inner<std::remove_reference_t<T>>>(std::forward<T>(object))) {
     }
 
-    AnyObject(AnyObject &&) noexcept = default;
-    AnyObject &operator=(AnyObject &&) noexcept = default;
+    AnyOptimizer(AnyOptimizer &&) noexcept = default;
+    AnyOptimizer &operator=(AnyOptimizer &&) noexcept = default;
 
     const InnerBase *operator->() const {
         return inner_.get();
@@ -26,19 +26,13 @@ public:
         return inner_.get();
     }
 
-    Tensor2D operator()(const Tensor2D& x) {
-        return inner_->operator()(x);
-    }
-
     class InnerBase {
     public:
         using Tensor2D = nn::Tensor2D;
-        friend class AnyObject;
+        friend class AnyOptimizer;
 
         virtual ~InnerBase() = default;
-        virtual Tensor2D operator()(const Tensor2D &) = 0;
-        virtual Tensor2D Update(Tensor2D &u) = 0;
-
+        virtual void Step(void) = 0;
     };
 
 private:
@@ -48,12 +42,8 @@ private:
         Inner(T &&value) : value_(std::move(value)) {
         }
 
-        virtual Tensor2D operator()(const Tensor2D &x) override {
-            return value_(x);
-        }
-
-        Tensor2D Update(Tensor2D &u) override {
-            return value_.Update(u);
+        void Step(void) override {
+            value_.Step();
         }
 
     private:
