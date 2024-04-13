@@ -1,6 +1,7 @@
 #pragma once
 #include "neuraldefines.h"
 #include "memory"
+#include <fstream>
 
 namespace nn {
 
@@ -18,6 +19,9 @@ public:
 
     void Train();
     void Eval();
+
+    friend std::fstream& operator<<(std::fstream& in, const Linear& layer);
+    friend std::fstream& operator>>(std::fstream& in, Linear& layer);
 
 private:
     struct LinearData {

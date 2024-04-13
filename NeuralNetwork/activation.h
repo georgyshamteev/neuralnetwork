@@ -16,6 +16,9 @@ public:
     Tensor2D Update(const Tensor2D& u);
     std::vector<ParameterPack> TrainingParams();
 
+    friend std::fstream& operator<<(std::fstream& in, const ActivationFunction& layer);
+    friend std::fstream& operator>>(std::fstream& in, ActivationFunction& layer);
+
 
 private:
     ActivationFunction(std::function<Tensor2D(const Tensor2D&)>,

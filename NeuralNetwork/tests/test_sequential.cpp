@@ -17,3 +17,29 @@ TEST_CASE("Sequential operator()") {
                          nn::ActivationFunction::ReLU(), nn::Linear(49, 10));
     auto y = model(x);
 }
+
+TEST_CASE("Write weights to file") {
+    nn::Tensor1D x = nn_random::Random::GetGaussVector(784);
+    nn::Sequential model(nn::Linear(784, 196), nn::ActivationFunction::ReLU(), nn::Linear(196, 49),
+                         nn::ActivationFunction::ReLU(), nn::Linear(49, 10));
+    auto y = model(x);
+
+    std::fstream stream;
+    stream.open("/home/georgyshamteev/CLionProjects/coursework/NeuralNetwork/tests/weights.txt",
+                std::ios::out);
+    stream << model;
+    stream.close();
+
+    nn::Sequential model1(nn::Linear(784, 196), nn::ActivationFunction::ReLU(), nn::Linear(196, 49),
+                          nn::ActivationFunction::ReLU(), nn::Linear(49, 10));
+
+    std::fstream stream1;
+    stream1.open("/home/georgyshamteev/CLionProjects/coursework/NeuralNetwork/tests/weights.txt",
+                 std::ios::in);
+
+    stream1 >> model1;
+
+    auto y1 = model1(x);
+
+    REQUIRE(y.isApprox(y1, 1e-5f));
+}

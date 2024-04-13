@@ -73,10 +73,52 @@ std::vector<ParameterPack> Linear::TrainingParams() {
         throw std::runtime_error("Can not get training params in eval mode.");
     }
     if (bias_state_ == Bias::enable) {
-        return std::vector<ParameterPack>{ ParameterPack{weight_, data_ptr_->weight_grad_},
+        return std::vector<ParameterPack>{ParameterPack{weight_, data_ptr_->weight_grad_},
                                           {bias_, data_ptr_->bias_grad_}};
     }
     return std::vector<ParameterPack>{{weight_, data_ptr_->weight_grad_}};
+}
+
+std::fstream& operator<<(std::fstream& out, const Linear& layer) {
+    if (layer.bias_state_ == Bias::enable) {
+        out << 1 << '\n';
+        out << layer.bias_.rows() << ' ' << layer.bias_.cols() << '\n';
+        out << layer.bias_ << '\n';
+    } else {
+        out << 0 << '\n';
+    }
+    out << layer.weight_.rows() << ' ' << layer.weight_.cols() << '\n';
+    out << layer.weight_ << '\n';
+    return out;
+}
+
+std::fstream& operator>>(std::fstream& in, Linear& layer) {
+    int bias;
+    in >> bias;
+    if (bias) {
+        Index bias_rows;
+        Index bias_cols;
+        in >> bias_rows >> bias_cols;
+        for (size_t i = 0; i < bias_rows; ++i) {
+            for (size_t j = 0; j < bias_cols; ++j) {
+                double w;
+                in >> w;
+                layer.bias_(i, j) = w;
+            }
+        }
+    }
+    Index rows;
+    Index cols;
+    in >> rows >> cols;
+
+    for (size_t i = 0; i < rows; ++i) {
+        for (size_t j = 0; j < cols; ++j) {
+            double w;
+            in >> w;
+            layer.weight_(i, j) = w;
+        }
+    }
+    return in;
 }
 
 }  // namespace nn

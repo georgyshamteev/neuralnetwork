@@ -27,3 +27,21 @@ std::vector<nn::ParameterPack> nn::Sequential::TrainingParams() {
     }
     return res;
 }
+
+//// TODO: if I make "nn::Sequential& layer" const then AnyLayer fails, why?
+
+std::fstream& nn::operator<<(std::fstream& in, nn::Sequential& layer) {
+    for (auto& l : layer.layers_) {
+        l << in;
+    }
+    //// bad sintaxis for some reason, "l << in" does l.operator<<(in) { in << l }; Problem in AnyLayer?
+    return in;
+}
+
+std::fstream& nn::operator>>(std::fstream& in, nn::Sequential& layer) {
+    for (auto& l : layer.layers_) {
+        l >> in;
+    }
+    //// same problem as for <<
+    return in;
+}

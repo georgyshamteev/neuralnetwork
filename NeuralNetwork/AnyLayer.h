@@ -3,6 +3,7 @@
 #include <Eigen/Dense>
 #include <memory>
 #include "neuraldefines.h"
+#include <fstream>
 
 class AnyLayer {
 public:
@@ -22,12 +23,21 @@ public:
     const InnerBase *operator->() const {
         return inner_.get();
     }
+
     InnerBase *operator->() {
         return inner_.get();
     }
 
     Tensor2D operator()(const Tensor2D &x) {
         return inner_->operator()(x);
+    }
+
+    std::fstream& operator<<(std::fstream& f) {
+        return inner_->operator<<(f);
+    }
+
+    std::fstream& operator>>(std::fstream& f) {
+        return inner_->operator>>(f);
     }
 
     class InnerBase {
@@ -39,6 +49,8 @@ public:
         virtual Tensor2D operator()(const Tensor2D &) = 0;
         virtual Tensor2D Update(Tensor2D &u) = 0;
         virtual std::vector<nn::ParameterPack> TrainingParams() = 0;
+        virtual std::fstream& operator<<(std::fstream&) = 0;
+        virtual std::fstream& operator>>(std::fstream&) = 0;
     };
 
 private:
@@ -58,6 +70,14 @@ private:
 
         std::vector<nn::ParameterPack> TrainingParams() override {
             return value_.TrainingParams();
+        }
+
+        std::fstream& operator<<(std::fstream& f) override {
+            return f << value_;
+        }
+
+        std::fstream& operator>>(std::fstream& f) override {
+            return f >> value_;
         }
 
     private:

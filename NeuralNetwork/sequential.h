@@ -17,6 +17,9 @@ public:
     void Backward(const Tensor2D& x);
     std::vector<ParameterPack> TrainingParams();
 
+    friend std::fstream& operator<<(std::fstream& in, Sequential& layer);
+    friend std::fstream& operator>>(std::fstream& in, Sequential& layer);
+
 private:
     std::vector<AnyLayer> layers_;
 };

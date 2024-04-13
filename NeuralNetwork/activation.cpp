@@ -78,4 +78,12 @@ std::vector<ParameterPack> ActivationFunction::TrainingParams() {
     return std::vector<ParameterPack>();
 }
 
+std::fstream& operator<<(std::fstream& in, const ActivationFunction& layer) {
+    return in;
+}
+
+std::fstream& operator>>(std::fstream& in, ActivationFunction& layer) {
+    return in;
+}
+
 }  // namespace nn
