@@ -6,6 +6,7 @@ include(cmake/TestSolution.cmake)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# set(CMAKE_CXX_FLAGS "-fstandalone-debug")
 
 include_directories(./EigenRand)
 include_directories(catch)

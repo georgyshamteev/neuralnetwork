@@ -79,4 +79,26 @@ DataLoader::DataLoaderIterator DataLoader::end() {
     return DataLoader::DataLoaderIterator(&data_, &labels_, end_idx, batch_size_);
 }
 
+Tensor2D ReadCSV(std::string path) {
+    std::ifstream indata;
+    indata.open(path);
+    std::string line;
+    std::vector<double> values;
+    uint rows = 0;
+    while (std::getline(indata, line)) {
+        if (rows == 0) {
+            ++rows;
+            continue;
+        }
+        std::stringstream line_stream(line);
+        std::string cell;
+        while (std::getline(line_stream, cell, ',')) {
+            values.push_back(std::stod(cell));
+        }
+        ++rows;
+    }
+
+    return Eigen::MatrixXd::Map(values.data(), rows, values.size()/rows);
+}
+
 }  // namespace utils

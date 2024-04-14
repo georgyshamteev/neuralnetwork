@@ -50,3 +50,9 @@ TEST_CASE("DataLoader iterates, shuffle") {
         std::cout << "-----------------" << std::endl;
     }
 }
+
+TEST_CASE("Test ReadCSV") {
+    std::string s = "/home/georgyshamteev/archive/mnist_test.csv";
+    std::cout << s;
+    REQUIRE_NOTHROW(utils::ReadCSV(s));
+}

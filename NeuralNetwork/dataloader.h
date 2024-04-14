@@ -1,4 +1,6 @@
 #include <Eigen/Dense>
+#include <fstream>
+#include <string>
 
 namespace utils {
 
@@ -57,5 +59,9 @@ private:
     shuffle enable_shuffle_ = shuffle::True;
     Permutations permutations_matrix_;
 };
+
+Tensor2D ReadCSV(std::string);
+
+
 
 }  // namespace utils
