@@ -33,7 +33,7 @@ Linear::Tensor2D Linear::Update(Linear::Tensor2D& u) {
 
     Tensor2D rethrow_gradient_vector = (weight_ * u).transpose();
     data_ptr_->weight_grad_ = (u * data_ptr_->input_seq_).transpose();
-    data_ptr_->bias_grad_ = u.rowwise().sum();
+    data_ptr_->bias_grad_ = u.rowwise().sum().transpose();
 
     return rethrow_gradient_vector;
 }

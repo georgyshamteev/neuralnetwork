@@ -35,7 +35,7 @@ std::fstream& nn::operator<<(std::fstream& in, nn::Sequential& layer) {
         l << in;
     }
     //// bad sintaxis for some reason, "l << in" does l.operator<<(in) { in << l }; Problem in
-    ///AnyLayer?
+    /// AnyLayer?
     return in;
 }
 

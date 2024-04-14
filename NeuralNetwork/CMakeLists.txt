@@ -93,3 +93,17 @@ add_catch(test_metrics tests/test_metrics.cpp
 )
 
 target_link_libraries(test_metrics Eigen3::Eigen)
+
+add_executable(test_mnist tests/test_mnist.cpp
+        activation.cpp
+        activation.h
+        linear.cpp
+        loss.cpp
+        random.cpp
+        sequential.cpp
+        optimizer.cpp
+        dataloader.cpp
+        metrics.cpp
+)
+
+target_link_libraries(test_mnist Eigen3::Eigen)

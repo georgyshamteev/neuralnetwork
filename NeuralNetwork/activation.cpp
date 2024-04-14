@@ -1,5 +1,7 @@
 #include "activation.h"
 
+#include <iostream>
+
 namespace nn {
 
 ActivationFunction ActivationFunction::ReLU() {
@@ -100,6 +102,8 @@ NeuralDefines::Tensor2D ActivationFunction::operator()(const NeuralDefines::Tens
 
 NeuralDefines::Tensor2D ActivationFunction::Update(const NeuralDefines::Tensor2D& u) {
     Tensor2D ret(u.cols(), u.rows());
+//    std::cout << input_ << std::endl;
+//    std::cout << "---------------";
     for (Index i = 0; i < u.rows(); ++i) {
         ret.col(i) = dsigma_(input_.row(i)).eval() * (u.row(i).transpose()).eval();
     }

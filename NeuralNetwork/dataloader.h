@@ -62,6 +62,6 @@ private:
 
 Tensor2D ReadCSV(std::string);
 
-
+Tensor2D Argmax(const Tensor2D& v, size_t axis = 1);
 
 }  // namespace utils

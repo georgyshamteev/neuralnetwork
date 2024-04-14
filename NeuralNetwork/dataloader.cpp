@@ -97,8 +97,41 @@ Tensor2D ReadCSV(std::string path) {
         }
         ++rows;
     }
+    --rows;
+    return Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(
+        values.data(), rows, values.size() / rows);
+}
 
-    return Eigen::MatrixXd::Map(values.data(), rows, values.size()/rows);
+Tensor2D Argmax(const Tensor2D& mat, size_t axis) {
+    if (axis == 1) {
+        Tensor2D ret(mat.rows(), 1);
+        for (Index i = 0; i < mat.rows(); ++i) {
+            size_t idx = 0;
+            double mx = mat(i, 0);
+            for (Index j = 0; j < mat.cols(); ++j) {
+                if (mat(i, j) > mx) {
+                    mx = mat(i, j);
+                    idx = j;
+                }
+            }
+            ret(i, 0) = idx;
+        }
+        return ret;
+    } else {
+        Tensor2D ret(1, mat.cols());
+        for (Index i = 0; i < mat.cols(); ++i) {
+            size_t idx = 0;
+            double mx = mat(0, i);
+            for (Index j = 0; j < mat.rows(); ++j) {
+                if (mat(i, j) > mx) {
+                    mx = mat(i, j);
+                    idx = j;
+                }
+            }
+            ret(0, i) = idx;
+        }
+        return ret;
+    }
 }
 
 }  // namespace utils

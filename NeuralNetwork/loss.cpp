@@ -1,5 +1,7 @@
 #include "loss.h"
 
+#include "iostream" // TODO delete
+
 namespace nn {
 
 Loss::Loss(std::function<double(const Tensor2D&, const Tensor2D&)> loss,
@@ -12,7 +14,8 @@ double Loss::operator()(const nn::Tensor2D& x, const nn::Tensor2D& y) {
     assert(x.cols() == y.cols());
     input_ = x;
     label_ = y;
-    return 1 / y.rows() * loss_(x, y);
+
+    return static_cast<double>(1) / y.rows() * loss_(x, y);
 }
 
 Tensor2D Loss::Gradient() const {

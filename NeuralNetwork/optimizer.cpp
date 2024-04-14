@@ -1,5 +1,7 @@
 #include "optimizer.h"
 
+#include <iostream>
+
 namespace nn {
 
 //// Constant optimizer
@@ -10,7 +12,14 @@ ConstantOptimizer::ConstantOptimizer(std::vector<ParameterPack>&& parameters_pac
 
 void ConstantOptimizer::Step(void) {
     for (auto& param_pack : params_) {
-        param_pack.w -= lr_ * param_pack.grad;
+        param_pack.grad *= lr_;
+        param_pack.w -= param_pack.grad;
+    }
+}
+
+void ConstantOptimizer::ZeroGrad(void) {
+    for (auto& param_pack : params_) {
+        param_pack.grad.setZero();
     }
 }
 
@@ -30,18 +39,12 @@ void HyperbolicOptimizer::Step(void) {
     lr_ = initial_lr_ / epoch_;
 }
 
+void HyperbolicOptimizer::ZeroGrad(void) {
+    for (auto& param_pack : params_) {
+        param_pack.grad.setZero();
+    }
+}
+
 ////
-
-Optimizer Optimizer::ConstantOptimizer(std::vector<ParameterPack>&& training_params,
-                                       double learning_rate) {
-    class ConstantOptimizer optimizer(std::move(training_params), learning_rate);
-    return Optimizer(std::move(optimizer));
-}
-
-Optimizer Optimizer::HyperbolicOptimizer(std::vector<ParameterPack>&& training_params,
-                                         double learning_rate) {
-    class ConstantOptimizer optimizer(std::move(training_params), learning_rate);
-    return Optimizer(std::move(optimizer));
-}
 
 }  // namespace nn
