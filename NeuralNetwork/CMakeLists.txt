@@ -80,3 +80,16 @@ add_catch(test_utils tests/test_utils.cpp
 )
 
 target_link_libraries(test_utils Eigen3::Eigen)
+
+add_catch(test_metrics tests/test_metrics.cpp
+        activation.cpp
+        linear.cpp
+        loss.cpp
+        random.cpp
+        sequential.cpp
+        optimizer.cpp
+        dataloader.cpp
+        metrics.cpp
+)
+
+target_link_libraries(test_metrics Eigen3::Eigen)
