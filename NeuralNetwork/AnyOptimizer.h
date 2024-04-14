@@ -2,6 +2,7 @@
 
 #include <Eigen/Dense>
 #include <memory>
+
 #include "neuraldefines.h"
 
 class AnyOptimizer {

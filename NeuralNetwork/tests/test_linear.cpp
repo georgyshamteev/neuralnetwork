@@ -1,4 +1,5 @@
 #include <catch.hpp>
+
 #include "linear.h"
 
 TEST_CASE("Linear is successfully created") {

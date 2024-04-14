@@ -1,9 +1,10 @@
 #pragma once
 
 #include <Eigen/Dense>
-#include <memory>
-#include "neuraldefines.h"
 #include <fstream>
+#include <memory>
+
+#include "neuraldefines.h"
 
 class AnyLayer {
 public:
@@ -32,11 +33,11 @@ public:
         return inner_->operator()(x);
     }
 
-    std::fstream& operator<<(std::fstream& f) {
+    std::fstream &operator<<(std::fstream &f) {
         return inner_->operator<<(f);
     }
 
-    std::fstream& operator>>(std::fstream& f) {
+    std::fstream &operator>>(std::fstream &f) {
         return inner_->operator>>(f);
     }
 
@@ -49,8 +50,8 @@ public:
         virtual Tensor2D operator()(const Tensor2D &) = 0;
         virtual Tensor2D Update(Tensor2D &u) = 0;
         virtual std::vector<nn::ParameterPack> TrainingParams() = 0;
-        virtual std::fstream& operator<<(std::fstream&) = 0;
-        virtual std::fstream& operator>>(std::fstream&) = 0;
+        virtual std::fstream &operator<<(std::fstream &) = 0;
+        virtual std::fstream &operator>>(std::fstream &) = 0;
     };
 
 private:
@@ -72,11 +73,11 @@ private:
             return value_.TrainingParams();
         }
 
-        std::fstream& operator<<(std::fstream& f) override {
+        std::fstream &operator<<(std::fstream &f) override {
             return f << value_;
         }
 
-        std::fstream& operator>>(std::fstream& f) override {
+        std::fstream &operator>>(std::fstream &f) override {
             return f >> value_;
         }
 

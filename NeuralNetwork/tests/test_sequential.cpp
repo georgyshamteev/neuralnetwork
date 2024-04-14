@@ -1,7 +1,8 @@
 #include <catch.hpp>
-#include "sequential.h"
-#include "linear.h"
+
 #include "activation.h"
+#include "linear.h"
+#include "sequential.h"
 
 TEST_CASE("test") {
     REQUIRE_NOTHROW(nn::Sequential{});

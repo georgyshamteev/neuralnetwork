@@ -1,4 +1,5 @@
 #include <catch.hpp>
+
 #include "loss.h"
 
 TEST_CASE("Loss creates") {

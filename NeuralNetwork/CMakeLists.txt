@@ -53,6 +53,7 @@ add_catch(test_sequential tests/test_sequential.cpp
         random.cpp
         sequential.cpp
         optimizer.cpp
+        dataloader.cpp
         )
 
 target_link_libraries(test_sequential Eigen3::Eigen)
@@ -67,3 +68,15 @@ add_catch(test_optimizer tests/test_optimizer.cpp
 )
 
 target_link_libraries(test_optimizer Eigen3::Eigen)
+
+add_catch(test_utils tests/test_utils.cpp
+        activation.cpp
+        linear.cpp
+        loss.cpp
+        random.cpp
+        sequential.cpp
+        optimizer.cpp
+        dataloader.cpp
+)
+
+target_link_libraries(test_utils Eigen3::Eigen)

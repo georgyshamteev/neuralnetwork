@@ -1,5 +1,6 @@
-#include "random.h"
 #include <catch.hpp>
+
+#include "random.h"
 #include "set"
 
 TEST_CASE("Get random vector works correctly") {

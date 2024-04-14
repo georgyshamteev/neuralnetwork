@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Eigen/Dense>
-#include "EigenRand/EigenRand"
+#include <EigenRand/EigenRand>
 
 namespace nn_random {
 

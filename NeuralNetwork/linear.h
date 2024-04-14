@@ -1,7 +1,9 @@
 #pragma once
-#include "neuraldefines.h"
-#include "memory"
+
 #include <fstream>
+
+#include "memory"
+#include "neuraldefines.h"
 
 namespace nn {
 

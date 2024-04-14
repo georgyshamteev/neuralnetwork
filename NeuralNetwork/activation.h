@@ -19,7 +19,6 @@ public:
     friend std::fstream& operator<<(std::fstream& in, const ActivationFunction& layer);
     friend std::fstream& operator>>(std::fstream& in, ActivationFunction& layer);
 
-
 private:
     ActivationFunction(std::function<Tensor2D(const Tensor2D&)>,
                        std::function<Tensor2D(const Tensor1D&)>);

@@ -1,10 +1,11 @@
 #pragma once
 
 #include <Eigen/Dense>
-#include "EigenRand/EigenRand"
-#include <cmath>
-#include "random.h"
+#include <EigenRand/EigenRand>
 #include <cassert>
+#include <cmath>
+
+#include "random.h"
 
 namespace nn {
 

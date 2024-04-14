@@ -7,5 +7,5 @@ AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
 DerivePointerAlignment: true
 KeepEmptyLinesAtTheStartOfBlocks: true
-SortIncludes: false
+SortIncludes: true
 InsertNewlineAtEOF: true

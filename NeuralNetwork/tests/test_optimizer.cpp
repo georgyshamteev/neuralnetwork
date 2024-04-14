@@ -1,4 +1,5 @@
 #include <catch.hpp>
+
 #include "optimizer.h"
 
 TEST_CASE("Constant optimizer creates and runs correctly") {

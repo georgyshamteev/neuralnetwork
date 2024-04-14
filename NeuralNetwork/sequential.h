@@ -1,8 +1,8 @@
 #pragma once
 
-#include "neuraldefines.h"
-#include "iostream"
 #include "AnyLayer.h"
+#include "iostream"
+#include "neuraldefines.h"
 
 namespace nn {
 

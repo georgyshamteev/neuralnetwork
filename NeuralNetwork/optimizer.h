@@ -1,10 +1,10 @@
-#include "neuraldefines.h"
 #include "AnyOptimizer.h"
+#include "neuraldefines.h"
 
 namespace nn {
 
 //// Хочу спрятать класс от пользователя, чтобы его мог звать только класс Optimizer, как лучше
-///сделать?
+/// сделать?
 
 class ConstantOptimizer {
 public:
