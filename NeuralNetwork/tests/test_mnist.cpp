@@ -6,35 +6,51 @@
 #include "../optimizer.h"
 #include "../sequential.h"
 
-
-int main()  {
+int main() {
     using Tensor2D = nn::Tensor2D;
 
     Tensor2D train_data = utils::ReadCSV("/home/georgyshamteev/archive/mnist_train.csv");
     Tensor2D test_data = utils::ReadCSV("/home/georgyshamteev/archive/mnist_test.csv");
 
     auto train_x = train_data.middleCols(1, train_data.cols() - 1);
-    auto train_y = train_data.col(0);
+    auto train_y_labels = train_data.col(0);
+    Tensor2D train_y(train_y_labels.rows(), 10);
+    train_y.setZero();
+
+    for (nn::Index i = 0; i < train_y_labels.rows(); ++i) {
+        nn::Index j = std::round(train_y_labels(i, 0));
+        train_y(i, j) = 1.0;
+    }
+
     train_x = train_x.unaryExpr([](double x) -> double { return x / 256; });
 
     auto test_x = test_data.middleCols(1, train_data.cols() - 1);
-    auto test_y = test_data.col(0);
+    auto test_y_labels = test_data.col(0);
+
+    Tensor2D test_y(test_y_labels.rows(), 10);
+    test_y.setZero();
+
+    for (nn::Index i = 0; i < test_y_labels.rows(); ++i) {
+        nn::Index j = std::round(test_y_labels(i, 0));
+        test_y(i, j) = 1.0;
+    }
+
     test_x = test_x.unaryExpr([](double x) -> double { return x / 256; });
 
     auto train_loader = utils::DataLoader(train_x, train_y, 100, utils::DataLoader::shuffle::True);
     auto val_loader = utils::DataLoader(test_x, test_y, 100, utils::DataLoader::shuffle::False);
 
-    size_t EPOCH = 100;
+    constexpr size_t kEpoch = 100;
 
-    nn::Sequential model(nn::Linear(784, 196, nn::Bias::enable), nn::ActivationFunction::ReLU(),
-                         nn::Linear(196, 49, nn::Bias::enable), nn::ActivationFunction::ReLU(),
-                         nn::Linear(49, 10, nn::Bias::enable), nn::ActivationFunction::Softmax());
+    nn::Sequential model(nn::Linear(784, 392, nn::Bias::enable), nn::ActivationFunction::ReLU(),
+                         nn::Linear(392, 32, nn::Bias::enable), nn::ActivationFunction::ReLU(),
+                         nn::Linear(32, 10, nn::Bias::enable), nn::ActivationFunction::Softmax());
 
     auto loss_fn = nn::Loss::MSE();
 
-    auto optimizer = nn::ConstantOptimizer(model.TrainingParams(), 0.001);
+    auto optimizer = nn::SGDOptimizer(model.TrainingParams(), 0.001, 0.8, 0.1, 0.1, true);
 
-    for (size_t epoch = 1; epoch < 2; ++epoch) {
+    for (size_t epoch = 1; epoch < kEpoch; ++epoch) {
         size_t batch_number = 1;
         for (const auto& batch : train_loader) {
             auto inputs = batch.data;
@@ -44,25 +60,46 @@ int main()  {
 
             auto output = model(inputs);
 
-            Tensor2D label_probs(labels.rows(), 10);
-            label_probs.setZero();
-
-            for (nn::Index i = 0; i < labels.rows(); ++i) {
-                nn::Index j = std::round(labels(i, 0));
-                label_probs(i, j) = 1.0;
-            }
-
-            auto loss = loss_fn(output, label_probs);
+            auto loss = loss_fn(output, labels);
 
             model.Backward(loss_fn.Gradient());
 
             optimizer.Step();
 
             if (batch_number % 10 == 0) {
-                std::cout << "epoch" << ": " << epoch << ", batch: " << batch_number << ", loss: " << loss
-                          << std::endl;
+                std::cout << "epoch" << ": " << epoch << ", batch: " << batch_number
+                          << ", loss: " << loss << std::endl;
             }
             ++batch_number;
         }
+
+        nn::Tensor1D pred_stacked(val_loader.Size());
+        nn::Index pred_cnt = 0;
+        nn::Tensor1D label_stacked(val_loader.Size());
+        nn::Index label_cnt = 0;
+
+        for (const auto& batch : val_loader) {
+            auto inputs = batch.data;
+            auto labels = batch.labels;
+
+            auto output = model(inputs);
+
+            Tensor2D out = utils::Argmax(output, 1);
+            for (size_t i = 0; i < out.rows(); ++i) {
+                pred_stacked(0, pred_cnt) = out(i, 0);
+                ++pred_cnt;
+            }
+
+            Tensor2D label = utils::Argmax(labels, 1);
+            for (size_t i = 0; i < label.rows(); ++i) {
+                label_stacked(0, label_cnt) = label(i, 0);
+                ++label_cnt;
+            }
+        }
+        std::cout << "Accuracy: "
+                  << metrics::Accuracy(pred_stacked, label_stacked, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
+                  << "     F1: "
+                  << metrics::F1(pred_stacked, label_stacked, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
+                  << std::endl;
     }
 }

@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.27)
 project(coursework)
 
+set(CMAKE_BUILD_TYPE Relwithdebinfo)
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(cmake/TestSolution.cmake)
 

@@ -19,6 +19,8 @@ public:
     };
     DataLoader(Tensor2D data, Tensor2D labels, size_t batch_size, shuffle enable_shuffle);
 
+    size_t Size() const;
+
     void Shuffle();
     void Restore();
 

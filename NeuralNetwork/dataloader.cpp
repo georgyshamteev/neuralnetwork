@@ -79,6 +79,10 @@ DataLoader::DataLoaderIterator DataLoader::end() {
     return DataLoader::DataLoaderIterator(&data_, &labels_, end_idx, batch_size_);
 }
 
+size_t DataLoader::Size() const {
+    return labels_.rows();
+}
+
 Tensor2D ReadCSV(std::string path) {
     std::ifstream indata;
     indata.open(path);

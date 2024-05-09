@@ -50,13 +50,17 @@ double Accuracy(const Tensor1D& pred, const Tensor1D& labels, std::vector<int> c
     Tensor1D correct_predictions(classes.size());
     correct_predictions.setZero();
 
+    double c = 0;
+
     for (Index i = 0; i < pred.cols(); ++i) {
         if (pred[i] == labels[i]) {
             ++correct_predictions[pred[i]];
+            ++c;
         }
     }
 
-    return static_cast<double>(correct_predictions.sum()) / pred.cols();
+//    return static_cast<double>(correct_predictions.sum()) / pred.cols();
+    return c / pred.cols();
 }
 
 double F1(const Tensor1D& pred, const Tensor1D& labels, std::vector<int> classes) {
