@@ -48,9 +48,29 @@ private:
 
 class AdamW {
 public:
+    AdamW(std::vector<ParameterPack>&& parameters_pack, double lr, double beta1 = 0.9, double beta2 = 0.999, double eps = 1e-08, double weight_decay = 0.01, bool amsgrad = false);
+    void Step(void);
+    void ZeroGrad(void);
 
 private:
+    std::vector<ParameterPack> params_;
+    double lr_;
+    double beta1_;
+    double beta2_;
+    double eps_;
+    double weight_decay_;
+    bool amsgrad_;
 
+    Tensor3D m_;
+    Tensor3D m_prev_;
+    Tensor3D v_;
+    Tensor3D v_prev_;
+
+    Tensor3D m_hat_;
+    Tensor3D v_hat_;
+    Tensor3D v_hat_max_;
+
+    size_t time_ = 1;
 };
 
 }  // namespace nn
