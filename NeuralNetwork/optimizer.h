@@ -29,7 +29,8 @@ private:
 
 class SGDOptimizer {
 public:
-    SGDOptimizer(std::vector<ParameterPack>&& parameters_pack, double lr, double momentum = 0, double dampening = 0, double weight_decay = 0, bool nesterov = false);
+    SGDOptimizer(std::vector<ParameterPack>&& parameters_pack, double lr, double momentum = 0,
+                 double dampening = 0, double weight_decay = 0, bool nesterov = false);
     void Step(void);
     void ZeroGrad(void);
 
@@ -48,7 +49,9 @@ private:
 
 class AdamW {
 public:
-    AdamW(std::vector<ParameterPack>&& parameters_pack, double lr, double beta1 = 0.9, double beta2 = 0.999, double eps = 1e-08, double weight_decay = 0.01, bool amsgrad = false);
+    AdamW(std::vector<ParameterPack>&& parameters_pack, double lr, double beta1 = 0.9,
+          double beta2 = 0.999, double eps = 1e-08, double weight_decay = 0.01,
+          bool amsgrad = false);
     void Step(void);
     void ZeroGrad(void);
 
@@ -71,6 +74,32 @@ private:
     Tensor3D v_hat_max_;
 
     size_t time_ = 1;
+};
+
+class RMSProp {
+public:
+    RMSProp(std::vector<ParameterPack>&& parameters_pack, double lr, double alpha = 0.99,
+            double eps = 1e-08, double weight_decay = 0, double momentum = 0,
+            bool centered = false);
+    void Step(void);
+    void ZeroGrad(void);
+
+private:
+    std::vector<ParameterPack> params_;
+    double lr_;
+    double alpha_;
+    double eps_;
+    double weight_decay_;
+    double momentum_;
+    bool centered_;
+
+    Tensor3D v_;
+    Tensor3D v_prev_;
+    Tensor3D b_;
+    Tensor3D b_prev_;
+    Tensor3D g_ave_;
+    Tensor3D g_ave_prev_;
+    Tensor3D v_hat_;
 };
 
 }  // namespace nn
