@@ -42,13 +42,14 @@ int main() {
 
     constexpr size_t kEpoch = 100;
 
-    nn::Sequential model(nn::Linear(784, 392, nn::Bias::enable), nn::ActivationFunction::ReLU(),
-                         nn::Linear(392, 32, nn::Bias::enable), nn::ActivationFunction::ReLU(),
+    nn::Sequential model(nn::Linear(784, 256, nn::Bias::enable), nn::ActivationFunction::ReLU(),
+                         nn::Linear(256, 128, nn::Bias::enable), nn::ActivationFunction::ReLU(),
+                         nn::Linear(128, 32, nn::Bias::enable), nn::ActivationFunction::ReLU(),
                          nn::Linear(32, 10, nn::Bias::enable), nn::ActivationFunction::Softmax());
 
     auto loss_fn = nn::Loss::MSE();
 
-    auto optimizer = nn::SGDOptimizer(model.TrainingParams(), 0.001, 0.8, 0.1, 0.1, true);
+    auto optimizer = nn::optimizer::RMSProp(model.TrainingParams(), 0.0001, 0.99, 1e-08, 0.001, 0.9, true);
 
     for (size_t epoch = 1; epoch < kEpoch; ++epoch) {
         size_t batch_number = 1;

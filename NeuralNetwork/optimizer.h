@@ -3,6 +3,8 @@
 
 namespace nn {
 
+namespace optimizer {
+
 class ConstantOptimizer {
 public:
     ConstantOptimizer(std::vector<ParameterPack>&& parameters_pack, double lr);
@@ -101,5 +103,7 @@ private:
     Tensor3D g_ave_prev_;
     Tensor3D v_hat_;
 };
+
+}
 
 }  // namespace nn

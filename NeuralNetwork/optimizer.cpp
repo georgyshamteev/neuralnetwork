@@ -4,6 +4,8 @@
 
 namespace nn {
 
+namespace optimizer {
+
 //// Constant optimizer
 
 ConstantOptimizer::ConstantOptimizer(std::vector<ParameterPack>&& parameters_pack, double lr)
@@ -256,4 +258,7 @@ void RMSProp::ZeroGrad(void) {
 }
 
 ////
+
+}  // namespace optimizer
+
 }  // namespace nn
